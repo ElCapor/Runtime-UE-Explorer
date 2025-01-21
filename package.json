@@ -1,0 +1,11 @@
+{
+    "name": "sdk-explorer",
+    "version": "0.0.1",
+    "description": "UESDK Explorer",
+    "homepage": "https://github.com/ElCapor",
+    "author": {
+        "name": "ElCapor",
+        "email": "",
+        "url": "https://github.com/ElCapor"
+    }
+}

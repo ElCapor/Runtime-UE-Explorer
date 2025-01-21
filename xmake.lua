@@ -1,0 +1,12 @@
+add_rules("mode.debug","mode.release")
+add_repositories("xrepo D:\\XRepo")
+add_requires("detours","uesdk", "imgui", {configs={dx11=true, win32=true}})
+target("DiddyDetector")
+    set_languages("cxx20")
+    set_kind("shared")
+    add_files("test.cpp", "source/src/*.cpp")
+    add_includedirs("source/include")
+    add_packages("detours", "imgui", "uesdk")
+    add_links("d3d11", "user32")
+    add_defines("V1_VERSION")
+    
