@@ -21,7 +21,11 @@ sdk_state &SDKState()
 	return state;
 }
 
-
+class FStructProperty : public SDK::FProperty
+{
+	public:
+	SDK::UStruct* Struct;
+};
 std::string EPropertyFlag2Str(SDK::EPropertyFlags Flag)
 {
 	switch (Flag)
@@ -160,6 +164,20 @@ std::vector<SDK::EClassCastFlags> GetCastFlags(SDK::UObject *Obj)
 	for (uint64_t flag = 1; flag <= SDK::CASTCLASS_FFieldPathProperty; flag <<= 1)
 	{
 		if (Obj->HasTypeFlag(static_cast<SDK::EClassCastFlags>(flag)))
+		{
+			CastFlags.push_back(static_cast<SDK::EClassCastFlags>(flag));
+		}
+	}
+
+	return CastFlags;
+}
+
+std::vector<SDK::EClassCastFlags> GetCastFlags(SDK::FField* field)
+{
+	std::vector<SDK::EClassCastFlags> CastFlags;
+	for (uint64_t flag = 1; flag <= SDK::CASTCLASS_FFieldPathProperty; flag <<= 1)
+	{
+		if (field->HasTypeFlag(static_cast<SDK::EClassCastFlags>(flag)))
 		{
 			CastFlags.push_back(static_cast<SDK::EClassCastFlags>(flag));
 		}
@@ -573,6 +591,14 @@ void SDKOverlay()
 										if (ImGui::TreeNode(Property->Name.ToString().c_str()))
 										{
 											ImGui::Text("Flags: %s", BuildPropertyFlagsStr(GetPropertyFlags(Property)).c_str());
+											//
+											ImGui::Text("Type %s", Property->ClassPrivate->Name.ToString().c_str());
+											ImGui::Text("Class cast flags %s", BuildCastFlagsStr(GetCastFlags(Field)).c_str());
+											if (Field->HasTypeFlag(SDK::EClassCastFlags::CASTCLASS_FStructProperty))
+											{
+												FStructProperty* test = reinterpret_cast<FStructProperty*>(Field);
+												ImGui::Text("Struct %s", test->Struct->Name().ToString().c_str());
+											}
 											ImGui::TreePop();
 										}
 									}
